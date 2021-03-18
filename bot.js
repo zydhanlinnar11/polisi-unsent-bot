@@ -16,7 +16,7 @@ client.on('messageDelete', (msg) => {
 })
 
 client.on('message', (msg) => {
-  if (msg.content === 'Halur') msg.reply('Haloo :v')
+  if (msg.content === 'halur bot') msg.reply('Haloo :v')
 })
 
 client.login(process.env.BOT_TOKEN)
