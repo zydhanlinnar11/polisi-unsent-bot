@@ -2,6 +2,8 @@ require('dotenv').config()
 
 const discord = require('discord.js')
 const client = new discord.Client()
+const express = require('express')
+const server = express()
 
 client.on('ready', () => {
   console.log('Halo2, siap 86!!!')
@@ -20,3 +22,9 @@ client.on('message', (msg) => {
 })
 
 client.login(process.env.BOT_TOKEN)
+
+server.get('/', (req, res) => {
+  res.send('BOT ON')
+})
+
+server.listen(process.env.PORT)
