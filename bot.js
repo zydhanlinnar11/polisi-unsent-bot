@@ -21,6 +21,7 @@ client.on('message', (msg) => {
   if (msg.content === 'halur bot') msg.reply('Haloo :v')
   else if (msg.content === 'bot lontong' || msg.content === 'Mbot')
     msg.reply('Seng nggenah ae')
+  else if (msg.content === 'mugo2 ga crash') msg.reply('aamiin lur, suwun2')
 })
 
 client.login(process.env.BOT_TOKEN)
