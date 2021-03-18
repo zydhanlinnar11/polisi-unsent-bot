@@ -19,6 +19,10 @@ client.on('messageDelete', (msg) => {
 
 client.on('message', (msg) => {
   if (msg.content === 'halur bot') msg.reply('Haloo :v')
+  else if (msg.content === 'bot lontong' || msg.content === 'Mbot') {
+    msg.reply('Seng nggenah ae')
+    msg.react(':angry:')
+  }
 })
 
 client.login(process.env.BOT_TOKEN)
