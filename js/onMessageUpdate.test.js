@@ -1,0 +1,68 @@
+const onMessageUpdate = require('./onMessageUpdate')
+
+test('Return if sender is bot', () => {
+  expect(
+    onMessageUpdate.onMessageUpdate(
+      { author: { bot: true } },
+      { author: { bot: true } }
+    )
+  ).toEqual('Ini bot')
+})
+
+test('Return if message containts URL', () => {
+  expect(
+    onMessageUpdate.onMessageUpdate(
+      { author: { bot: false }, content: new String('https://zydhan.xyz') },
+      { author: { bot: false } }
+    )
+  ).toEqual('Ini URL')
+  expect(
+    onMessageUpdate.onMessageUpdate(
+      { author: { bot: false }, content: new String('https://') },
+      { author: { bot: false } }
+    )
+  ).toEqual('Ini URL')
+  expect(
+    onMessageUpdate.onMessageUpdate(
+      { author: { bot: false }, content: new String('http://zydhan.xyz') },
+      { author: { bot: false } }
+    )
+  ).toEqual('Ini URL')
+  expect(
+    onMessageUpdate.onMessageUpdate(
+      { author: { bot: false }, content: new String('http://') },
+      { author: { bot: false } }
+    )
+  ).toEqual('Ini URL')
+})
+
+test('Return if current embeds is nothing and updated with some embeds', () => {
+  expect(
+    onMessageUpdate.onMessageUpdate(
+      { author: { bot: false }, embeds: [], content: new String('something') },
+      { author: { bot: false }, embeds: ['ppp'] }
+    )
+  ).toEqual('New embed')
+})
+
+test('Message before update sent', () => {
+  let reply = ''
+  const date = new Date(2021, 5, 14, 7, 22, 1, 1)
+  expect(
+    onMessageUpdate.onMessageUpdate(
+      {
+        author: { bot: false, id: '000' },
+        embeds: [],
+        content: new String('something'),
+        createdAt: date,
+        channel: {
+          send: (msg) => (reply = msg),
+        },
+      },
+      { author: { bot: false }, embeds: [] }
+    )
+  ).toEqual('Message before update sent')
+  expect(reply).toEqual(
+    `Sebelum diedit : \"something\"-<@000> ${date.toLocaleString('id-ID')} WIB`
+  )
+})
