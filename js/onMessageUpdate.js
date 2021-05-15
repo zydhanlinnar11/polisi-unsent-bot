@@ -1,4 +1,4 @@
-function onMessageUpdate(oldMsg, newMsg) {
+function onMessageUpdate(oldMsg, newMsg, actions = []) {
   if (oldMsg.author.bot) return 'Ini bot'
   if (
     oldMsg.content.indexOf('http://') != -1 ||
@@ -6,12 +6,9 @@ function onMessageUpdate(oldMsg, newMsg) {
   )
     return 'Ini URL'
   if (oldMsg.embeds.length == 0 && newMsg.embeds.length > 0) return 'New embed'
-  oldMsg.channel.send(
-    `Sebelum diedit : \"${oldMsg.content}\"-<@${
-      oldMsg.author.id
-    }> ${oldMsg.createdAt.toLocaleString('id-ID')} WIB`
-  )
-  return 'Message before update sent'
+  actions.forEach((action) => {
+    action.function(...action.params)
+  })
 }
 
-module.exports = { onMessageUpdate }
+module.exports = onMessageUpdate

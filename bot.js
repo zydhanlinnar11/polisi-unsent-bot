@@ -5,24 +5,51 @@ const client = new discord.Client({ fetchAllMembers: true })
 const express = require('express')
 const server = express()
 
-const { printSiap } = require('./js/printSiap')
-client.on('ready', printSiap)
-
-const onMessageDeleteHandler = require('./js/onMessageDelete')
-client.on('messageDelete', (msg) => {
-  onMessageDeleteHandler(msg, client)
+client.on('ready', () => {
+  console.log(process.env.READY_MESSAGE)
 })
 
-const { onMessageUpdate } = require('./js/onMessageUpdate')
-client.on('messageUpdate', onMessageUpdate)
+client.on('messageDelete', (msg) => {
+  const onMessageDelete = require('./js/onMessageDelete')
+  const actions = [
+    {
+      function: require('./js/resendMessage'),
+      params: [msg, 'Sebelum diunsent : '],
+    },
+    {
+      function: require('./js/resendImage'),
+      params: [msg, 'Sebelum diunsent : '],
+    },
+  ]
+  onMessageDelete(msg, client, actions)
+})
+
+client.on('messageUpdate', (oldMsg, newMsg) => {
+  const onMessageUpdate = require('./js/onMessageUpdate')
+  const actions = [
+    {
+      function: require('./js/resendMessage'),
+      params: [oldMsg, 'Sebelum diedit : '],
+    },
+  ]
+  onMessageUpdate(oldMsg, newMsg, actions)
+})
 
 server.use(express.urlencoded({ extended: false }))
 
-const { onMessage } = require('./js/onMessage')
-client.on('message', onMessage)
+const onMessage = require('./js/onMessage')
+client.on('message', (msg) => {
+  actions = [
+    // React bentrul
+    {
+      function: require('./js/reactBentrul'),
+      params: [msg],
+    },
+  ]
+  onMessage(msg, actions)
+})
 
-const BOT_TOKEN = process.env.BOT_TOKEN
-client.login(BOT_TOKEN)
+client.login(process.env.BOT_TOKEN)
 
 server.get('/', (req, res) => {
   res.redirect('./server')
@@ -38,17 +65,12 @@ server.use('/channel', channelRouter(client))
 const serverRouter = require('./routes/server')
 server.use('/server', serverRouter(client))
 
-const NOT_FOUND_MESSAGE = process.env.NOT_FOUND_MESSAGE
 server.get('/*', (req, res) => {
   res.render('not-found', {
     avatarURL: client.user.avatarURL(),
-    message: NOT_FOUND_MESSAGE,
+    message: process.env.NOT_FOUND_MESSAGE,
     username: client.user.username,
   })
 })
 
-module.exports = {
-  BOT_TOKEN,
-  NOT_FOUND_MESSAGE,
-}
 server.listen(process.env.PORT || 8000)
