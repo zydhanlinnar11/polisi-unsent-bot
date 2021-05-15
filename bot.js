@@ -17,8 +17,14 @@ client.on('messageDelete', (msg) => {
       params: [msg, 'Sebelum diunsent : '],
     },
     {
-      function: require('./js/resendImage'),
-      params: [msg, 'Sebelum diunsent : '],
+      function: require('./js/resendEmbeddedMessage'),
+      params: [
+        msg,
+        {
+          prefix: 'Sebelum diunsent : ',
+          embeddedTypes: ['image', 'video', 'gifv'],
+        },
+      ],
     },
   ]
   onMessageDelete(msg, client, actions)
