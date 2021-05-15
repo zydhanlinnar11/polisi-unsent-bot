@@ -43,14 +43,14 @@ test('Resend message yang sesuai format', () => {
 
   resendMessage(basicMessage, 'Sebelum diunsent: ')
   expect(sentMessage).toEqual(
-    `Sebelum diunsent: \"Basic message\"-<@000> ${basicMessage.createdAt.toLocaleString(
+    `Sebelum diunsent:\ " Basic message \"-<@000> ${basicMessage.createdAt.toLocaleString(
       'id-ID'
     )} WIB`
   )
 
   resendMessage(basicMessage)
   expect(sentMessage).toEqual(
-    `\"Basic message\"-<@000> ${basicMessage.createdAt.toLocaleString(
+    `\" Basic message \"-<@000> ${basicMessage.createdAt.toLocaleString(
       'id-ID'
     )} WIB`
   )

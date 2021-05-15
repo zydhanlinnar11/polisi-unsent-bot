@@ -5,9 +5,8 @@ function resendMessage(msg, prefix = '') {
     msg.embeds?.[0]?.url === msg.content
   )
     return // Return if this an embedded message
-  console.log(msg)
   msg.channel.send(
-    `${prefix}\"${msg.content}\"-<@${
+    `${prefix}\" ${msg.content} \"-<@${
       msg.author.id
     }> ${msg.createdAt.toLocaleString('id-ID')} WIB`
   )
