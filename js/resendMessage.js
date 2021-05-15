@@ -1,6 +1,11 @@
 function resendMessage(msg, prefix = '') {
-  if (msg.embeds?.[0]?.type === 'image' && msg.embeds?.[0]?.url === msg.content)
-    return // Return if this an embedded image
+  const embedTypes = ['image', 'rich', 'video', 'gifv', 'article', 'link']
+  if (
+    embedTypes.indexOf(msg.embeds?.[0]?.type) != -1 &&
+    msg.embeds?.[0]?.url === msg.content
+  )
+    return // Return if this an embedded message
+  console.log(msg)
   msg.channel.send(
     `${prefix}\"${msg.content}\"-<@${
       msg.author.id
